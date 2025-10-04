@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 
-from routers import sign_in_up_routers
+from src.routers import sign_in_up_routers
 
 app = FastAPI()
 

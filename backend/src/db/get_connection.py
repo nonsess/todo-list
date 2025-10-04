@@ -1,19 +1,29 @@
 from psycopg import connect
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+import os
 
-engine = create_engine("postgresql+psycopg://sashamac:qwerty@localhost:5432/todo_app")
+DB_USER = os.getenv("POSTGRES_USER")
+DB_PASSWORD = os.getenv("POSTGRES_PASSWORD")
+DB_NAME = os.getenv("POSTGRES_DB")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+
+
+
+
+engine = create_engine(f"postgresql+psycopg://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB_NAME}")
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
 def get_connection():
     conn = connect(
-        dbname="todo_app",
-        user="USERNAME",
-        password="PASSWORD",
-        host="HOST",
-        port="PORT"
+        dbname=DB_NAME,
+        user=DB_USER,
+        password=DB_PASSWORD,
+        host=DB_HOST,
+        port=DB_PORT
     )
     return conn
 

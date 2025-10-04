@@ -2,10 +2,10 @@ import fastapi
 from fastapi import APIRouter, Depends, HTTPException, Form
 from fastapi.security import OAuth2PasswordRequestForm
 import requests
-from db.get_connection import get_session
-from db.models import User
-from help_stuff.auth import create_access_token, create_refresh_token, authenticate_user
-from schemas.auth_schemas import UserCreateSchema, UserOutSchema, TokenSchema, UserSignInSchema
+from src.db.get_connection import get_session
+from src.db.models import User
+from src.help_stuff.auth import create_access_token, create_refresh_token, authenticate_user
+from src.schemas.auth_schemas import UserCreateSchema, UserOutSchema, TokenSchema, UserSignInSchema
 from fastapi import Request, Response
 
 router = APIRouter(prefix="/auth", tags=["auth"])
