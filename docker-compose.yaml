@@ -27,7 +27,7 @@ services:
 
   migrate:
     build: ./backend
-    command: python src/create_tables.py
+    command: python src/db/create_tables.py
     depends_on:
       - db
     env_file:
