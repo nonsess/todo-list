@@ -1,6 +1,6 @@
 import jwt
 from datetime import datetime, timedelta
-from db.models import User
+from src.db.models import User
 from dotenv import load_dotenv
 import os
 
