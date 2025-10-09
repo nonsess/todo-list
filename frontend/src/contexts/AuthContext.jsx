@@ -1,6 +1,7 @@
 "use client"
 
 import { createContext, useContext, useState, useMemo } from "react"
+import AuthService from "@/services/auth.service"
 
 export const AuthContext = createContext()
 
@@ -11,21 +12,14 @@ export default function AuthProvider({ children }) {
     const login = async (username, password) => {
         try {
             await AuthService.login(username, password)
-            const currentUser = await AuthService.getCurrentUser()
-            setUser(currentUser)
-            return currentUser
         } catch (error) {
             throw error
         }
     }
 
-    const register = async (username, email, password) => {
+    const register = async (username, password) => {
         try {
-            await AuthService.register(username, email, password)
-            await AuthService.login(email, password)
-            const currentUser = await AuthService.getCurrentUser()
-            setUser(currentUser)
-            return currentUser
+            await AuthService.register(username, password)
         } catch (error) {
             throw error
         }
@@ -42,7 +36,6 @@ export default function AuthProvider({ children }) {
 
     const isAuth = useMemo(() => {
         return true
-        // return user !== null
     }, [user])
 
     const contextValue = useMemo(() => ({
