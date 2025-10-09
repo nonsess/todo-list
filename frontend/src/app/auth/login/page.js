@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,6 +16,7 @@ import Container from "@/components/layout/Container";
 
 export default function Login() {
     const { login } = useAuth()
+    const router = useRouter()
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [errorMessage, setErrorMessage] = useState("")
@@ -27,6 +29,7 @@ export default function Login() {
         
         try {
             await login(username, password)
+            router.push("/")
         } catch (error) {
             setUsername('')
             setPassword('')
