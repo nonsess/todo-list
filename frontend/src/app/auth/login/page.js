@@ -1,12 +1,41 @@
-import Container from "@/components/layout/Container";
+'use client'
+
+import { useState } from "react";
+import Link from "next/link";
+
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { PasswordInput } from "@/components/ui/PasswordInput";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import Link from "next/link";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+
+import { useAuth } from "@/contexts/AuthContext";
+import Container from "@/components/layout/Container";
 
 export default function Login() {
+    const { login } = useAuth()
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        setIsLoading(true)
+        setErrorMessage("")
+        
+        try {
+            await login(username, password)
+        } catch (error) {
+            setUsername('')
+            setPassword('')
+            setErrorMessage(error.message || "Произошла ошибка при входе")
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return (
         <Container>
             <div className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
@@ -19,8 +48,16 @@ export default function Login() {
                             </CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-6">
-                            <form className="space-y-4">
-                                {/* Поле username */}
+                            {/* Блок ошибки */}
+                            {errorMessage && (
+                                <Alert variant="destructive" className="animate-in fade-in-0 duration-300">
+                                    <AlertDescription>
+                                        {errorMessage}
+                                    </AlertDescription>
+                                </Alert>
+                            )}
+
+                            <form className="space-y-4" onSubmit={handleSubmit}>
                                 <div className="space-y-2">
                                     <Label htmlFor="username" className="text-sm font-medium">
                                         Имя пользователя
@@ -28,10 +65,14 @@ export default function Login() {
                                     <Input
                                         id="username"
                                         placeholder="Введите ваш юзернейм"
+                                        value={username}
+                                        onChange={(e) => setUsername(e.target.value)}
+                                        required
+                                        disabled={isLoading}
+                                        className={errorMessage && "border-destructive focus-visible:ring-destructive"}
                                     />
                                 </div>
 
-                                {/* Поле пароля */}
                                 <div className="space-y-2">
                                     <Label htmlFor="password" className="text-sm font-medium">
                                         Пароль
@@ -39,19 +80,30 @@ export default function Login() {
                                     <PasswordInput
                                         id="password"
                                         placeholder="Введите ваш пароль"
+                                        value={password}
+                                        onChange={(e) => setPassword(e.target.value)}
+                                        required
+                                        disabled={isLoading}
+                                        errorClassName={errorMessage && "border-destructive focus-visible:ring-destructive"}
                                     />
                                 </div>
 
-                                {/* Кнопка входа */}
                                 <Button 
                                     type="submit" 
                                     className="w-full"
+                                    disabled={isLoading}
                                 >
-                                    Войти
+                                    {isLoading ? (
+                                        <>
+                                            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-background border-t-transparent" />
+                                            Вход...
+                                        </>
+                                    ) : (
+                                        "Войти"
+                                    )}
                                 </Button>
                             </form>
 
-                            {/* Разделитель */}
                             <div className="relative">
                                 <div className="absolute inset-0 flex items-center">
                                     <span className="w-full border-t border-gray-300" />
@@ -61,7 +113,6 @@ export default function Login() {
                                 </div>
                             </div>
 
-                            {/* Ссылка на регистрацию */}
                             <div className="text-center">
                                 <p className="text-sm text-gray-600">
                                     Нет аккаунта?{" "}
