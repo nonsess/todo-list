@@ -56,7 +56,7 @@ async def sign_out(request: Request = None, db=Depends(get_session), user_data: 
     return Response({"message": "Signed out successfully"})
 
 """TODO: user/me endpoint to get user info based on access token."""
-@router.get("users/me")
+@router.get("/users/me")
 async def profile(request: Request = None, db=Depends(get_session), access_token: Annotated[str | None, Header()] = None) -> dict:
     token = access_token
     if not token:
@@ -69,7 +69,7 @@ async def profile(request: Request = None, db=Depends(get_session), access_token
     return {"username": user.username}
 
 """TODO: refresh token endpoint to get new access token using refresh token."""
-@router.post("auth/refresh_token")
+@router.post("/auth/refresh_token")
 async def refresh(request: Request = None, db=Depends(get_session), access_token: Annotated[str | None, Header()] = None) -> dict:
     token = access_token
     if not token:
