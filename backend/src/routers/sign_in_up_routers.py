@@ -57,8 +57,8 @@ async def sign_out(request: Request = None, db=Depends(get_session), user_data: 
 
 """TODO: user/me endpoint to get user info based on access token."""
 @router.get("users/me")
-async def profile(request: Request = None, db=Depends(get_session), user_agent: Annotated[str | None, Header()] = None) -> dict:
-    token = user_agent
+async def profile(request: Request = None, db=Depends(get_session), access_token: Annotated[str | None, Header()] = None) -> dict:
+    token = access_token
     if not token:
         raise HTTPException(status_code=401, detail="Invalid or missing token")
     if is_token_expired(token):
@@ -70,8 +70,8 @@ async def profile(request: Request = None, db=Depends(get_session), user_agent: 
 
 """TODO: refresh token endpoint to get new access token using refresh token."""
 @router.post("auth/refresh_token")
-async def refresh(request: Request = None, db=Depends(get_session), user_agent: Annotated[str | None, Header()] = None) -> dict:
-    token = user_agent
+async def refresh(request: Request = None, db=Depends(get_session), access_token: Annotated[str | None, Header()] = None) -> dict:
+    token = access_token
     if not token:
         raise HTTPException(status_code=401, detail="Invalid or missing token")
     if is_token_expired(token):
