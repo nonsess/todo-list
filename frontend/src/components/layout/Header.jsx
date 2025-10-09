@@ -2,11 +2,11 @@ import Link from "next/link";
 import { Nabla } from "next/font/google";
 import Container from "./Container";
 
-const nabla = Nabla({ 
+export const nabla = Nabla({ 
     subsets: ['latin'],
     weight: ['400'],
     display: 'swap',
-  })
+})
 
 export default function Header() {
     return (

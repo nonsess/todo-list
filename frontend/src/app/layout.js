@@ -1,7 +1,9 @@
-import { Montserrat } from "next/font/google";
 import "./globals.css";
-import Header from "@/components/layout/Header";
+
+import { Montserrat } from "next/font/google";
+
 import MainProvider from "@/contexts/MainProvider";
+import ConditionalHeader from "@/components/layout/ConditionalHeader";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat-sans",
@@ -20,7 +22,7 @@ export default function RootLayout({ children }) {
                 <body
                     className={`${montserrat.className} antialiased`}
                 >
-                <Header />
+                    <ConditionalHeader />
                     {children}
                 </body>
             </html>

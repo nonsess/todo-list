@@ -13,7 +13,7 @@ export function PasswordInput({
   onChange,
   required = false,
   className = "",
-  errorClassName = "",
+  inputClassName = "",
   disabled = false,
 }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -33,7 +33,7 @@ export function PasswordInput({
           value={value}
           onChange={onChange}
           required={required}
-          className={`pr-10 ${errorClassName}`}
+          className={`pr-10 ${inputClassName}`}
           disabled={disabled}
         />
         <button
