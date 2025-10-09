@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, useContext, useState, useMemo } from "react"
+import { createContext, useContext, useState, useMemo, useEffect } from "react"
 import AuthService from "@/services/auth.service"
 
 export const AuthContext = createContext()
@@ -9,9 +9,26 @@ export default function AuthProvider({ children }) {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                setLoading(true)
+                const user = await AuthService.getCurrentUser()
+                setUser(user)
+            } catch {
+                setUser(null)
+            } finally {
+                setLoading(false)
+            }
+        }
+        
+        fetchData()
+    }, [])
+
     const login = async (username, password) => {
         try {
             await AuthService.login(username, password)
+            setUser({ username })
         } catch (error) {
             throw error
         }
@@ -20,6 +37,16 @@ export default function AuthProvider({ children }) {
     const register = async (username, password) => {
         try {
             await AuthService.register(username, password)
+            setUser({ username })
+        } catch (error) {
+            throw error
+        }
+    }
+
+    const getCurrentUser = async () => {
+        try {
+            const user = await AuthService.getCurrentUser()
+            setUser(user)
         } catch (error) {
             throw error
         }
@@ -35,7 +62,7 @@ export default function AuthProvider({ children }) {
     }
 
     const isAuth = useMemo(() => {
-        return true
+        return user !== null
     }, [user])
 
     const contextValue = useMemo(() => ({
@@ -43,6 +70,7 @@ export default function AuthProvider({ children }) {
         loading,
         login,
         register,
+        getCurrentUser,
         logout,
         isAuth
     }), [
@@ -50,6 +78,7 @@ export default function AuthProvider({ children }) {
         loading,
         login,
         register,
+        getCurrentUser,
         logout,
         isAuth
     ])
